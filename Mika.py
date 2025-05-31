@@ -94,7 +94,7 @@ async def get_spotify_token(client_id, client_secret):
         result = await resp.json()
         return result.get("access_token")
 
-async def get_spotify_album_url(token, album, artist): #בגלל שדיסקוגס מגבילים את הAPI שלהם והרבה פעמים האלבום קאבר & טראקליסט די גרועים באתר, החלטתי לקחת אותם דרך ספוטיפיי
+async def get_spotify_album_url(token, album, artist): #בגלל שדיסקוגס מגבילים את הכמות מידע שאפשר לקחת והרבה פעמים האלבום קאבר & טראקליסט די גרועים באתר, החלטתי לקחת אותם דרך ספוטיפיי
     headers = {"Authorization": f"Bearer {token}"}
 
     def clean_artist_for_spotify(a):
@@ -115,7 +115,7 @@ async def get_spotify_album_url(token, album, artist): #בגלל שדיסקוג�
         f"album:{clean_album_for_spotify(album)}",
     ]
     session = await get_session()
-    for query in queries: # מכאן הלאה אני די בטוח שהתחלתי להשתגע כבר,chatgpt רשם כמעט את כל שאר הפקודה הזאת
+    for query in queries: # מכאן הלאה אני די בטוח שהתחלתי להשתגע כבר, צ'אט רשם כמעט את כל שאר הפקודה הזאת
         search_url = f"https://api.spotify.com/v1/search?q={urllib.parse.quote(query)}&type=album&limit=10"
         async with session.get(search_url, headers=headers) as resp:
             result = await resp.json()
@@ -169,7 +169,7 @@ async def resolve_discogs_artist_name(user_input, discogs_token):
         titles = [r.get("title", "") for r in results]
         best_match, score, idx = process.extractOne(user_input, titles, scorer=fuzz.ratio) #מנסה לקחת את האומן שהכי הגיוני
         #כאשר יש אומנים רבים עם אותו השם דיסקוגס מביא להם מספרים - אומן (1) & אומן (2)
-        #אז בשביל שזה לא יביא אומן רנדומלי עם 2 שירים מלפני 400 שנה שרושמים Whitechapel או משהו דומה, זה יביא את הלהקה ההרבה יותר מוכרת
+        #אז בשביל שזה לא יביא יוצר רנדומלי עם שירים מלפני ארבע מאות שנה שרושמים שם של אומן, זה יביא את האחד ההרבה יותר מוכר
         print(f"[DEBUG] resolve_discogs_artist_name: Input: '{user_input}', Best match: '{best_match}', Score: {score}")
         if score >= 75:
             return best_match
@@ -241,7 +241,7 @@ async def fetch_and_save_curator_reviews():
     count = 50
     session_url = "https://store.steampowered.com/curator/41625352-Crack-Smoking-Time/ajaxgetcuratorrecommendations"
     temp_reviews = []
-    headers = { #מסתבר שסטים לא אוהבים שקליינטים לא אמיתיים מנסים לתקשר עם השרתים שלהם :)
+    headers = { # מסתבר שסטים לא אוהבים שקליינטים לא אמיתיים מנסים לתקשר עם השרתים שלהם :)
         "User-Agent": "Mozilla/5.0",
         "Referer": "https://store.steampowered.com/"
     }
@@ -307,12 +307,12 @@ async def on_ready():
 
 # ======= Preloads for Triggers =======
 media_triggers = [
-    (["wow", "וואו"], "wow.jpg"), #נחשף על ידי זינאדין זידאן ב1.5
+    (["wow", "וואו"], "wow.jpg"), # נחשף על ידי זינאדין זידאן ב1.5
     (["מכשפה בוכרית"], "yerk.png"), # פורמן מצא את זה ב11.5
     (["noob", "נוב"], "the_noob.mp4"),
     (["you can call me deku","gosling","גוסלינג"], "deku.mp4"),
     (["you can call me miku"], "miku-final.png"),
-    (["fyp", "for you", "פור יו", "tiktok", "טיקטוק"], "fyp.mp4"), #גיימינג מצא את זה ב29.5
+    (["fyp", "for you", "פור יו", "tiktok", "טיקטוק"], "fyp.mp4"), #גיימינג מצא את זה ב 29.5
     (["warden", "וורדן"], "./Fish/Warden.png") # מאוד התאכזבתי שלא מצאתם את זה עד עכשיו, זה היה האיסטר אג האהוב עלי :(
 ]
 def suicide_triggers(msg): #דניאל נמ מצא את זה (בטעות) ב10.5
@@ -348,7 +348,7 @@ async def on_message(message):
     author_id = message.author.id
 
     # --- Yap Counter ---
-    #אבירם גיימינג הפעיל את זה ב10.5, 3 דקות אחרי שעשיתי push לאפדייט...
+    #אבירם גיימינג הפעיל את זה ב10.5, 3 דקות אחרי שעשיתי פוש לאפדייט...
     if message.content.startswith(bot.command_prefix):
         message_streaks[channel_id]["last_user"] = None
         message_streaks[channel_id]["count"] = 0
@@ -385,10 +385,10 @@ async def on_message(message):
             return
 
     # Custom triggers
-    if word_in_text("מה אומר דוד", msg): #אני בטעות חשפתי את זה ב4.5
+    if word_in_text("מה אומר דוד", msg): # אני בטעות חשפתי את זה ב4.5
         await message.channel.send("https://www.the-importer.co.il/cdn-cgi/image/format=auto,metadata=none,quality=85,fit=pad/media/catalog/product/4/7/4750021000805.jpg")
 
-    elif word_in_text("holy fuck", msg): #דניאל נמ מצא את זה ב30.4
+    elif word_in_text("holy fuck", msg): # דניאל נמ מצא את זה ב30.4
         await message.channel.send("https://www.ginotpeershop.co.il/images/logos/2/WhatsApp9_11zon_(1).png")
 
     elif word_in_text("stunna", msg) or word_in_text("סטאנה", msg): #ולדי היה האחד שביקש את זה ואיכשהו עדיין לא הפעילו את זה עד עכשיו
@@ -399,17 +399,17 @@ async def on_message(message):
 
     # תיוגים
     for user in message.mentions:
-        if user.id == 168329788325363712 and not message.reference: #האיסטר אג הראשון שגילו. ע"י אבירם ב25.4
+        if user.id == 168329788325363712 and not message.reference: # האיסטר אג הראשון שגילו. ע"י אבירם ב25.4
             await message.reply("אה סנקי")
             return
-        if user.id == 201051167084642304 and not message.reference: #אם מתייגים את דינו
+        if user.id == 201051167084642304 and not message.reference: # אם מתייגים את דינו
             await message.reply("https://hebrew-academy.org.il/keyword/%D7%91%D6%BC%D6%B9%D7%94%D6%B6%D7%9F/")
             return
-        if user.id == 343667951959932940 and not message.reference: #אם מתייגים את סוריקטה, למרות שאני די בטוח שזה משום מה לא עובד חחחחחח
+        if user.id == 343667951959932940 and not message.reference: # אם מתייגים את סוריקטה, למרות שאני די בטוח שזה משום מה לא עובד חחחחחח
             await message.channel.send("https://upload.wikimedia.org/wikipedia/en/0/03/Walter_White_S5B.png")
             return
 
-    # שולח משחק גאצ'ה רנדומלי אם מתייגים את יאן ורושמים משהו המכיל את המילה goon
+    # שולח משחק גאצ'ה רנדומלי אם מתייגים את יאן ורושמים משהו המכיל את המילה גון או גונר בשני השפות
     if any(user.id == 280755361596702721 for user in message.mentions) and (
             'goon' in msg or 'גונ' in msg or 'גון' in msg):
         if gacha_games:
@@ -417,7 +417,7 @@ async def on_message(message):
             await message.reply(f" קח משחק גאצ'ה רנדומלי: **{selected_game}**")
         return
 
-    # האיסטר אג של קרליק, האחד שעבדתם עליו כל כך קשה. שולח דג רנדומלי אם מתייגים את קרליק ורושמים fish
+    # האיסטר אג של קרליק, האחד שעבדתם עליו כל כך קשה. שולח דג רנדומלי אם מתייגים את קרליק ורושמים פיש בשני השפות
     if any(user.id == 473100047849095168 for user in message.mentions) and (
             "fish" in msg or "פיש" in msg or "דג" in msg):
         if fish_list:
@@ -430,7 +430,7 @@ async def on_message(message):
         await send_file(message.channel, "howard.png")
         return
 
-    # זה אחד מיוחד - כל פעם שרפאל ברמן מתייג את דניאל נמ זה שולח משפט רנדומלי מרשימה קצרה, אבל איכשהו מאז היום שעשיתי לזה push ברמן פשוט הפסיק
+    # זה אחד מיוחד - כל פעם שרפאל ברמן מתייג את דניאל נמ זה שולח משפט רנדומלי מרשימה קצרה, אבל איכשהו מאז היום שעשיתי לאפדייט פוש ברמן פשוט הפסיק
     author_id = 334649464750866433
     target_id = 290380573124591627
     if message.author.id == author_id and any(user.id == target_id for user in message.mentions):
@@ -459,7 +459,7 @@ async def mishpat(ctx):
     theorem_entry = random.choice(entries)
     lines = theorem_entry.strip().split("\n")
     raw_id = lines[0].replace("ID:", "").strip("[] ").zfill(3)
-    if raw_id == "123": #אם יוצא משפט פיתגורס
+    if raw_id == "123": # אם יוצא משפט פיתגורס
         embed = discord.Embed(
             title="[ 123 ]",
             description="https://www.youtube.com/watch?v=40M9UJXBvIw&t=63s)",
@@ -552,7 +552,7 @@ async def help_crack(ctx):
 
 @bot.command()
 async def update_reviews(ctx):
-    if ctx.author.id != 338054995209355274: #אם מישהו שהוא לא אני מנסה להשתמש בפקודה הזאת
+    if ctx.author.id != 338054995209355274: # אם מישהו שהוא לא אני מנסה להשתמש בפקודה הזאת
         await send_file(ctx, "stfu.mov")
         return
     await ctx.send("🔄 Updating curator reviews...")
@@ -560,7 +560,7 @@ async def update_reviews(ctx):
     await ctx.send(f"✅ Updated and saved {len(curator_reviews)} reviews.")
 
 @bot.command()
-async def album(ctx, *, filters: str = ""): #הפקודה הזאת עברה כל כך הרבה גרסאות ביני ובין chatgpt שבאמת אין לי מושג מה עושה מה כבר
+async def album(ctx, *, filters: str = ""): # הפקודה הזאת עברה כל כך הרבה גרסאות ביני ובין צ'אט שבאמת אין לי מושג מה עושה מה כבר
     if not DISCOGS_TOKEN:
         await ctx.send("❌ Missing Discogs API token.")
         return
